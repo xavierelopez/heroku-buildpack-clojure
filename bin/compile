@@ -130,10 +130,10 @@ if [ -d "$ENV_DIR" ]; then
     fi
 fi
 
-echo "-----> Generating clojurescript with Leiningen:"
+echo "-----> Generating javascript with Leiningen:"
 echo "       Running: lein cljsbuild once"
 cd $BUILD_DIR
-PATH=.lein/bin:/usr/local/bin:/usr/bin:/bin JAVA_OPTS="-Xmx500m -Duser.home=$BUILD_DIR" lein clsbuild once 2>&1 | sed -u 's/^/       /'
+PATH=.lein/bin:/usr/local/bin:/usr/bin:/bin JAVA_OPTS="-Xmx500m -Duser.home=$BUILD_DIR" lein cljsbuild once 2>&1 | sed -u 's/^/       /'
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   echo " !     Failed to create tar with Leiningen"
   exit 1
