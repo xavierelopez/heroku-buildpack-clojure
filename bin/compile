@@ -130,17 +130,14 @@ if [ -d "$ENV_DIR" ]; then
     fi
 fi
 
-# Calculate build command
-if [ "$BUILD_COMMAND" = "" ]; then
-    if [ -x $BUILD_DIR/bin/build ]; then
-        echo "       Found bin/build; running it instead of default lein invocation."
-        BUILD_COMMAND=bin/build
-    else
-        BUILD_COMMAND="lein $LEIN_BUILD_TASK"
-    fi
+echo "-----> Generating clojurescript with Leiningen:"
+echo "       Running: lein cljsbuild once"
+cd $BUILD_DIR
+PATH=.lein/bin:/usr/local/bin:/usr/bin:/bin JAVA_OPTS="-Xmx500m -Duser.home=$BUILD_DIR" lein clsbuild once 2>&1 | sed -u 's/^/       /'
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+  echo " !     Failed to create tar with Leiningen"
+  exit 1
 fi
-
-echo "       Running: $BUILD_COMMAND"
 
 cd $BUILD_DIR
 PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
